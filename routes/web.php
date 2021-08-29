@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,7 @@ Route::put('/student', [StudentController::class, 'updateStudent'])->name('stude
 Route::delete('/students/{id}', [StudentController::class, 'deleteStudent']);
 
 Route::delete('/selected-students', [StudentController::class, 'deleteCheckedStudents'])->name('student.deleteSelected');
+
+Route::get('register', [AuthController::class, 'index']);
+
+Route::post('register', [AuthController::class, 'registerSubmit'])->name('register.submit');
