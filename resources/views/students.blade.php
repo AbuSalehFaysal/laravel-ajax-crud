@@ -23,11 +23,13 @@
                         <div class="card-header d-flex justify-content-between">
                             <h4>Students</h4>
                             <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Student</a>
+                            <a href="#" class="btn btn-danger" id="deleteAllSelected">Delete Selected</a>
                         </div>
                         <div class="card-body">
                             <table id="studentTable" class="table">
                                 <thead>
                                     <tr>
+                                        <th><input type="checkbox" name="" id="chkCheckAll" /></th>
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Email</th>
@@ -38,6 +40,7 @@
                                 <tbody>
                                     @foreach($students as $student)
                                     <tr id="sid{{$student->id}}">
+                                        <td><input type="checkbox" name="ids" class="checkBoxClass" value="{{$student->id}}" id="" /></td>
                                         <td>{{$student->firstname}}</td>
                                         <td>{{$student->lastname}}</td>
                                         <td>{{$student->email}}</td>
@@ -138,23 +141,9 @@
         </div>
     </div>
 
-
-
-
-    <!-- Optional JavaScript; choose one of the two! -->
-
-    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
-    -->
 
     <script>
         $("#studentForm").submit(function(e) {
@@ -245,6 +234,35 @@
                 });
             }
         }
+    </script>
+
+    <script>
+        $(function(e){
+            $("#chkCheckAll").click(function(){
+                $(".checkBoxClass").prop('checked', $(this).prop('checked'));
+            });
+
+            $("#deleteAllSelected").click(function(e){
+                e.preventDefault();
+                let allids = [];
+                $("input:checkbox[name=ids]:checked").each(function(){
+                    allids.push($(this).val());
+                });
+                $.ajax({
+                    url: "{{route('student.deleteSelected')}}",
+                    type: "DELETE",
+                    data: {
+                        _token: $("input[name=_token]").val(),
+                        ids: allids,
+                    },
+                    success: function(response){
+                        $.each(allids, function(key, val){
+                            $("#sid"+val).remove();
+                        });
+                    }
+                });
+            });
+        });
     </script>
 </body>
 
