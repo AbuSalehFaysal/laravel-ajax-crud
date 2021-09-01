@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,3 +35,5 @@ Route::delete('/selected-students', [StudentController::class, 'deleteCheckedStu
 Route::get('register', [AuthController::class, 'index']);
 
 Route::post('register', [AuthController::class, 'registerSubmit'])->name('register.submit');
+
+Route::get('/post', [PostController::class, 'index']);
