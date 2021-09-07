@@ -40,3 +40,5 @@ Route::post('register', [AuthController::class, 'registerSubmit'])->name('regist
 Route::get('/post', [PostController::class, 'index']);
 
 Route::get('/chart', [ChartController::class, 'index']);
+
+Route::get('/bar-chart', [ChartController::class, 'barChart']);
